@@ -1,0 +1,6 @@
+Warning[207] C:\USERS\ERICK\DOCUMENTS\ELT\ELT 332 - INTERFACES E  MICROCONTROLADOR\P4\EX0.ASM 110 : Found label after column 1. (LIGA)
+Warning[207] C:\USERS\ERICK\DOCUMENTS\ELT\ELT 332 - INTERFACES E  MICROCONTROLADOR\P4\EX0.ASM 114 : Found label after column 1. (DESLIGA)
+Message[302] C:\USERS\ERICK\DOCUMENTS\ELT\ELT 332 - INTERFACES E  MICROCONTROLADOR\P4\EX0.ASM 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\ERICK\DOCUMENTS\ELT\ELT 332 - INTERFACES E  MICROCONTROLADOR\P4\EX0.ASM 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\ERICK\DOCUMENTS\ELT\ELT 332 - INTERFACES E  MICROCONTROLADOR\P4\EX0.ASM 136 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[203] C:\USERS\ERICK\DOCUMENTS\ELT\ELT 332 - INTERFACES E  MICROCONTROLADOR\P4\EX0.ASM 162 : Found opcode in column 1. (GOTO)

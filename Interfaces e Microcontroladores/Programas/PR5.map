@@ -1,0 +1,52 @@
+MPLINK 4.37, Linker
+Linker Map File - Created Mon Aug 30 22:23:55 2021
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000000
+                   .org_1       code   0x000000    program   0x000002
+                   .org_2       code   0x000004    program   0x000064
+       .config_2007_PR5.O       code   0x002007    program   0x000002
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000000      
+                            0x000004    0x000035      
+                            0x002007    0x002007      
+            52 out of 8453 program addresses used, program memory utilization is 0%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+               DECREMENTA   0x000016    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+                    EXIBE   0x000013    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+               INCREMENTA   0x00000c    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+                   INICIO   0x000025    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+                     MAIN   0x000033    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+                  SAI_INT   0x000007    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+                    TESTE   0x00001c    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+                    TRAVA   0x000022    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+                   TRAVA2   0x00001f    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                  SAI_INT   0x000007    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+               INCREMENTA   0x00000c    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+                    EXIBE   0x000013    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+               DECREMENTA   0x000016    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+                    TESTE   0x00001c    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+                   TRAVA2   0x00001f    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+                    TRAVA   0x000022    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+                   INICIO   0x000025    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+                     MAIN   0x000033    program     static C:\Users\erick\Documents\ELT\ELT 332 - INterfaces e  MicroControlador\Lucas 90272-20210824T000114Z-001\Lucas 90272\PR5.asm
+
+

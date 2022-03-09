@@ -1,0 +1,24 @@
+A) K será acionado quando B não estiver pressionado
+e A for pressionado ou sofrer um pulso.
+H será ligado se, e somente se K e C estiverem em estado lógico
+alto.
+B) Ao pressionar a botoeira A o contator k1
+é energizado e espera 5 segundos para
+acionar os contatos temporizados K1,
+como k1 ainda não foi energizado o
+contator K2 é acionado, o que aciona o
+contato temporizado K2.
+Ao se passar 5 segundos os contatos K1
+são acionados, desenergizando K2 e 
+ligando H, mas como K2 é retardado no 
+desligamento o contato K2 permance 
+ativado por mais 5 segundos quando é
+finalmente desligado, fazendo com que 
+o contator K1 seja desenergizado e a 
+lâmpada H seja desligada.
+
+
+Em suma, quando a botoeira B é 
+acionada esperam-se 5 segundos para 
+ligar a lâmpada H, ao se passar mais 5 
+segundos a lâmpada H é desligada. 

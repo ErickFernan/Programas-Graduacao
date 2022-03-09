@@ -1,0 +1,6 @@
+Message[305] C:\USERS\ERICK\DOCUMENTS\ELT\ELT 332 - INTERFACES E  MICROCONTROLADOR\P5\EX5.ASM 131 : Using default destination of 1 (file).
+Message[305] C:\USERS\ERICK\DOCUMENTS\ELT\ELT 332 - INTERFACES E  MICROCONTROLADOR\P5\EX5.ASM 137 : Using default destination of 1 (file).
+Message[302] C:\USERS\ERICK\DOCUMENTS\ELT\ELT 332 - INTERFACES E  MICROCONTROLADOR\P5\EX5.ASM 158 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\ERICK\DOCUMENTS\ELT\ELT 332 - INTERFACES E  MICROCONTROLADOR\P5\EX5.ASM 160 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\ERICK\DOCUMENTS\ELT\ELT 332 - INTERFACES E  MICROCONTROLADOR\P5\EX5.ASM 162 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[203] C:\USERS\ERICK\DOCUMENTS\ELT\ELT 332 - INTERFACES E  MICROCONTROLADOR\P5\EX5.ASM 192 : Found opcode in column 1. (GOTO)

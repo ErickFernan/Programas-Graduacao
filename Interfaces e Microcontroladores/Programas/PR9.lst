@@ -1,0 +1,636 @@
+MPASM  5.14                           PR9.ASM   5-24-2019  11:15:37         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00002 ;*                       NOME DO PROJETO                           *
+                      00003 ;*                           CLIENTE                               *
+                      00004 ;*         DESENVOLVIDO PELO DEL ENGENHARIA E CONSULTORIA      *
+                      00005 ;*   VERSÃO: 1.0                           DATA: 17/06/10          *
+                      00006 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00007 ;*                     DESCRIÇÃO DO ARQUIVO                        *
+                      00008 ;*-----------------------------------------------------------------*
+                      00009 ;*   MODELO PARA PIC 16F877A                                       *
+                      00010 ;*                                                                 *
+                      00011 ;*                                                                 *
+                      00012 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00013 
+                      00014 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00015 ;*                     ARQUIVOS DE DEFINIÇÕES                      *
+                      00016 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00017 #INCLUDE <P16F877A.INC> ;ARQUIVO PADRÃO MICROCHIP PARA 16F877A
+                      00001         LIST
+                      00002 ; P16F877A.INC  Standard Header File, Version 1.00    Microchip Technology, Inc.
+                      00400         LIST
+                      00018 
+2007   3F72           00019         __CONFIG _CP_OFF & _PWRTE_ON & _WDT_OFF & _LVP_OFF & _HS_OSC
+                      00020 
+                      00021 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00022 ;*                    PAGINAÇÃO DE MEMÓRIA                         *
+                      00023 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00024 ;DEFINIÇÃO DE COMANDOS DE USUÁRIO PARA ALTERAÇÃO DA PÁGINA DE MEMÓRIA
+                      00025 #DEFINE BANK0   BCF STATUS,RP0  ;SETA BANK 0 DE MEMÓRIA
+                      00026 #DEFINE BANK1   BSF STATUS,RP0  ;SETA BANK 1 DE MAMÓRIA
+                      00027 
+                      00028 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00029 ;*                         VARIÁVEIS                               *
+                      00030 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00031 ; DEFINIÇÃO DOS NOMES E ENDEREÇOS DE TODAS AS VARIÁVEIS UTILIZADAS 
+                      00032 ; PELO SISTEMA
+                      00033         CBLOCK  0x20    ;ENDEREÇO INICIAL DA MEMÓRIA DE
+                      00034                                         ;USUÁRIO
+  00000020            00035                 W_TEMP          ;REGISTRADORES TEMPORÁRIOS PARA USO
+  00000021            00036                 STATUS_TEMP     ;JUNTO ÀS INTERRUPÇÕES
+                      00037 
+                      00038                 ;NOVAS VARIÁVEIS
+                      00039         
+  00000022            00040                 VALOR ;VARIÁVEL RESPONSÁVEL PELO CONTADOR
+  00000023            00041                 TFILTRO ;VARIÁVEL RESPONSÁVEL PELO FILTRO
+  00000024            00042                 TFILTRODEC ;VARIÁVEL RESPONSÁVEL PELO FILTRO DO DECREMENTO  
+                      00043 
+                      00044         ENDC                    ;FIM DO BLOCO DE MEMÓRIA
+                      00045 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00046 ;*                        FLAGS INTERNOS                           *
+                      00047 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00048 ; DEFINIÇÃO DE TODOS OS FLAGS UTILIZADOS PELO SISTEMA
+                      00049 
+                      00050 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+MPASM  5.14                           PR9.ASM   5-24-2019  11:15:37         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00051 ;*                         CONSTANTES                              *
+                      00052 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00053 ; DEFINIÇÃO DE TODAS AS CONSTANTES UTILIZADAS PELO SISTEMA
+  00000009            00054 VALORMAXIMO EQU .9
+  00000000            00055 VALORMINIMO EQU .0
+                      00056 
+                      00057 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00058 ;*                           ENTRADAS                              *
+                      00059 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00060 ; DEFINIÇÃO DE TODOS OS PINOS QUE SERÃO UTILIZADOS COMO ENTRADA
+                      00061 ; RECOMENDAMOS TAMBÉM COMENTAR O SIGNIFICADO DE SEUS ESTADOS (0 E 1)
+                      00062 #DEFINE SW4 PORTB,0
+                      00063 
+                      00064 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00065 ;*                           SAÍDAS                                *
+                      00066 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00067 ; DEFINIÇÃO DE TODOS OS PINOS QUE SERÃO UTILIZADOS COMO SAÍDA
+                      00068 ; RECOMENDAMOS TAMBÉM COMENTAR O SIGNIFICADO DE SEUS ESTADOS (0 E 1)
+                      00069 
+                      00070 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00071 ;*                       VETOR DE RESET                            *
+                      00072 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00073 
+0000                  00074         ORG     0x00                    ;ENDEREÇO INICIAL DE PROCESSAMENTO
+0000   284B           00075         GOTO    INICIO
+                      00076         
+                      00077 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00078 ;*                    INÍCIO DA INTERRUPÇÃO                        *
+                      00079 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00080 ; ENDEREÇO DE DESVIO DAS INTERRUPÇÕES. A PRIMEIRA TAREFA É SALVAR OS
+                      00081 ; VALORES DE "W" E "STATUS" PARA RECUPERAÇÃO FUTURA
+                      00082 
+0004                  00083         ORG     0x04                    ;ENDEREÇO INICIAL DA INTERRUPÇÃO
+0004   00A0           00084         MOVWF   W_TEMP          ;COPIA W PARA W_TEMP
+0005   0E03           00085         SWAPF   STATUS,W
+0006   00A1           00086         MOVWF   STATUS_TEMP     ;COPIA STATUS PARA STATUS_TEMP
+                      00087 
+                      00088 
+                      00089 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00090 ;*                    ROTINA DE INTERRUPÇÃO                        *
+                      00091 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00092 ; AQUI SERÁ ESCRITA AS ROTINAS DE RECONHECIMENTO E TRATAMENTO DAS
+                      00093 ; INTERRUPÇÕES
+                      00094 
+                      00095 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00096 ;*                 ROTINA DE SAÍDA DA INTERRUPÇÃO                  *
+                      00097 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00098 ; OS VALORES DE "W" E "STATUS" DEVEM SER RECUPERADOS ANTES DE 
+                      00099 ; RETORNAR DA INTERRUPÇÃO
+                      00100 
+0007                  00101 SAI_INT
+0007   0E21           00102         SWAPF   STATUS_TEMP,W
+0008   0083           00103         MOVWF   STATUS          ;MOVE STATUS_TEMP PARA STATUS
+MPASM  5.14                           PR9.ASM   5-24-2019  11:15:37         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0009   0EA0           00104         SWAPF   W_TEMP,F
+000A   0E20           00105         SWAPF   W_TEMP,W        ;MOVE W_TEMP PARA W
+000B   0009           00106         RETFIE
+                      00107 
+                      00108 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00109 ;*                       ROTINAS E SUBROTINAS                      *
+                      00110 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00111 ; CADA ROTINA OU SUBROTINA DEVE POSSUIR A DESCRIÇÃO DE FUNCIONAMENTO
+                      00112 ; E UM NOME COERENTE ÀS SUAS FUNÇÕES.
+                      00113 
+000C                  00114 INCREMENTA 
+000C   0AA2           00115         INCF    VALOR,1
+000D   2013           00116         CALL    EXIBE
+000E   0822           00117         MOVFW   VALOR
+000F   3C09           00118         SUBLW   VALORMAXIMO
+0010   1D03           00119         BTFSS   STATUS,Z
+0011   2820           00120         GOTO    TRAVA
+0012   2817           00121         GOTO    DECREMENTA      
+                      00122         
+                      00123 
+0013                  00124 EXIBE 
+0013   0822           00125         MOVFW   VALOR
+0014   2039           00126         CALL    TABELA
+0015   0088           00127         MOVWF   PORTD
+0016   0008           00128         RETURN  
+                      00129 
+0017                  00130 DECREMENTA
+0017   03A2           00131         DECF    VALOR,1
+0018   2013           00132         CALL    EXIBE
+0019   0822           00133         MOVFW   VALOR
+001A   1903           00134         BTFSC   STATUS,Z
+001B   2867           00135         GOTO    MAIN
+001C   2823           00136         GOTO    TRAVA2  
+                      00137 
+001D                  00138 TESTE
+001D   1C06           00139         BTFSS SW4
+001E   2834           00140         GOTO FILTRO2
+001F   281D           00141         GOTO TESTE
+                      00142 
+0020                  00143 TRAVA
+0020   1806           00144         BTFSC SW4
+0021   2867           00145         GOTO MAIN 
+0022   2820           00146         GOTO TRAVA
+                      00147 
+0023                  00148 TRAVA2
+0023   1806           00149     BTFSC SW4
+0024   281D           00150         GOTO TESTE 
+0025   2823           00151         GOTO TRAVA2
+                      00152 
+0026                  00153 TESTECHAVE
+0026   1C06           00154         BTFSS   SW4
+0027   282B           00155         GOTO    FILTRO
+0028   3009           00156         MOVLW   VALORMAXIMO
+MPASM  5.14                           PR9.ASM   5-24-2019  11:15:37         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0029   00A3           00157         MOVWF   TFILTRO 
+002A   282B           00158         GOTO    FILTRO
+                      00159         
+002B                  00160 FILTRO
+002B   03A3           00161         DECF    TFILTRO,1
+002C   1D03           00162         BTFSS   STATUS, Z
+002D   2826           00163         GOTO    TESTECHAVE
+002E   280C           00164         GOTO    INCREMENTA
+                      00165 
+002F                  00166 TESTECHAVE2
+002F   1C06           00167         BTFSS   SW4
+0030   282B           00168         GOTO    FILTRO
+0031   3009           00169         MOVLW   VALORMAXIMO
+0032   00A4           00170         MOVWF   TFILTRODEC      
+0033   2834           00171         GOTO    FILTRO2
+                      00172         
+0034                  00173 FILTRO2
+0034   03A4           00174         DECF    TFILTRODEC,1
+0035   0824           00175         MOVFW   TFILTRODEC
+0036   1903           00176         BTFSC   STATUS, Z
+0037   2826           00177         GOTO    TESTECHAVE
+0038   2817           00178         GOTO    DECREMENTA
+                      00179 
+0039                  00180 TABELA
+0039   390F           00181         ANDLW   .15
+003A   0782           00182         ADDWF   PCL,F
+003B   343F           00183         RETLW   B'00111111'
+003C   3406           00184         RETLW   B'00000110'
+003D   345B           00185         RETLW   B'01011011'
+003E   344F           00186         RETLW   B'01001111'
+003F   3466           00187         RETLW   B'01100110'
+0040   346D           00188         RETLW   B'01101101'
+0041   347D           00189         RETLW   B'01111101'
+0042   3407           00190         RETLW   B'00000111'
+0043   347F           00191         RETLW   B'01111111'
+0044   346F           00192         RETLW   B'01101111'
+0045   3479           00193         RETLW   B'01111001'
+0046   3479           00194         RETLW   B'01111001'
+0047   3479           00195         RETLW   B'01111001'
+0048   3479           00196         RETLW   B'01111001'
+0049   3479           00197         RETLW   B'01111001'
+004A   3479           00198         RETLW   B'01111001'
+                      00199 
+                      00200 
+                      00201 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00202 ;*                     INICIO DO PROGRAMA                          *
+                      00203 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00204         
+004B                  00205 INICIO
+004B   1683           00206         BANK1                           ;ALTERA PARA O BANCO 1
+004C   3000           00207     MOVLW       B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+004D   0088           00208         MOVWF   TRISD           ;DEFINE ENTRADAS E SAÍDAS DO PORT
+MPASM  5.14                           PR9.ASM   5-24-2019  11:15:37         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+004E   3000           00209         MOVLW   B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+004F   0085           00210         MOVWF   TRISA
+0050   3000           00211         MOVLW   B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0051   0089           00212         MOVWF   TRISE
+0052   30FF           00213         MOVLW   B'11111111'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0053   0086           00214         MOVWF   TRISB           ;DEFINE ENTRADAS E SAÍDAS DO PORTB
+0054   3004           00215         MOVLW   B'00000100'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0055   0081           00216         MOVWF   OPTION_REG      ;DEFINE OPÇÕES DE OPERAÇÃO
+0056   3080           00217         MOVLW   B'10000000'
+0057   008B           00218         MOVWF   INTCON
+0058   3006           00219         MOVLW   B'00000110'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0059   009F           00220         MOVWF   ADCON1
+                      00221         
+                      00222         
+                      00223 
+                      00224         ;DEFINE OPÇÕES DE INTERRUPÇÕES
+005A   1283           00225         BANK0                           ;RETORNA PARA O BANCO
+005B   302B           00226         MOVLW   B'00101011'
+005C   0090           00227     MOVWF       T1CON
+                      00228 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00229 ;*                     INICIALIZAÇÃO DAS VARIÁVEIS                 *
+                      00230 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+005D   1685           00231         BSF             PORTA,5
+005E   1505           00232         BSF             PORTA,2
+005F   1409           00233         BSF             PORTE,0
+0060   1509           00234         BSF             PORTE,2
+0061   01A2           00235         CLRF    VALOR
+0062   3009           00236         MOVLW   VALORMAXIMO
+0063   00A3           00237         MOVWF   TFILTRO 
+0064   3009           00238         MOVLW   VALORMAXIMO
+0065   00A4           00239         MOVWF   TFILTRODEC      
+0066   2013           00240         CALL    EXIBE
+                      00241 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00242 ;*                     ROTINA PRINCIPAL                            *
+                      00243 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+0067                  00244 MAIN
+                      00245 
+0067   1C06           00246         BTFSS   SW4
+0068   282B           00247         GOTO    FILTRO 
+                      00248         
+                      00249 
+0069   2867           00250         GOTO    MAIN
+                      00251 
+                      00252 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00253 ;*                       FIM DO PROGRAMA                           *
+                      00254 ;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                      00255 
+                      00256         END
+MPASM  5.14                           PR9.ASM   5-24-2019  11:15:37         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ACKDT                             00000005
+ACKEN                             00000004
+ACKSTAT                           00000006
+ADCON0                            0000001F
+ADCON1                            0000009F
+ADCS0                             00000006
+ADCS1                             00000007
+ADCS2                             00000006
+ADDEN                             00000003
+ADFM                              00000007
+ADIE                              00000006
+ADIF                              00000006
+ADON                              00000000
+ADRESH                            0000001E
+ADRESL                            0000009E
+BANK0                             BCF STATUS,RP0
+BANK1                             BSF STATUS,RP0
+BCLIE                             00000003
+BCLIF                             00000003
+BF                                00000000
+BRGH                              00000002
+C                                 00000000
+C1INV                             00000004
+C1OUT                             00000006
+C2INV                             00000005
+C2OUT                             00000007
+CCP1CON                           00000017
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+CCP1Y                             00000004
+CCP2CON                           0000001D
+CCP2IE                            00000000
+CCP2IF                            00000000
+CCP2M0                            00000000
+CCP2M1                            00000001
+CCP2M2                            00000002
+CCP2M3                            00000003
+CCP2X                             00000005
+CCP2Y                             00000004
+CCPR1H                            00000016
+CCPR1L                            00000015
+CCPR2H                            0000001C
+CCPR2L                            0000001B
+CHS0                              00000003
+CHS1                              00000004
+CHS2                              00000005
+CIS                               00000003
+CKE                               00000006
+MPASM  5.14                           PR9.ASM   5-24-2019  11:15:37         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CKP                               00000004
+CM0                               00000000
+CM1                               00000001
+CM2                               00000002
+CMCON                             0000009C
+CMIE                              00000006
+CMIF                              00000006
+CREN                              00000004
+CSRC                              00000007
+CVR0                              00000000
+CVR1                              00000001
+CVR2                              00000002
+CVR3                              00000003
+CVRCON                            0000009D
+CVREN                             00000007
+CVROE                             00000006
+CVRR                              00000005
+D                                 00000005
+DATA_ADDRESS                      00000005
+DC                                00000001
+DECREMENTA                        00000017
+D_A                               00000005
+EEADR                             0000010D
+EEADRH                            0000010F
+EECON1                            0000018C
+EECON2                            0000018D
+EEDATA                            0000010C
+EEDATH                            0000010E
+EEIE                              00000004
+EEIF                              00000004
+EEPGD                             00000007
+EXIBE                             00000013
+F                                 00000001
+FERR                              00000002
+FILTRO                            0000002B
+FILTRO2                           00000034
+FSR                               00000004
+GCEN                              00000007
+GIE                               00000007
+GO                                00000002
+GO_DONE                           00000002
+I2C_DATA                          00000005
+I2C_READ                          00000002
+I2C_START                         00000003
+I2C_STOP                          00000004
+IBF                               00000007
+IBOV                              00000005
+INCREMENTA                        0000000C
+INDF                              00000000
+INICIO                            0000004B
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+MPASM  5.14                           PR9.ASM   5-24-2019  11:15:37         PAGE  8
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+INTF                              00000001
+IRP                               00000007
+MAIN                              00000067
+NOT_A                             00000005
+NOT_ADDRESS                       00000005
+NOT_BO                            00000000
+NOT_BOR                           00000000
+NOT_DONE                          00000002
+NOT_PD                            00000003
+NOT_POR                           00000001
+NOT_RBPU                          00000007
+NOT_RC8                           00000006
+NOT_T1SYNC                        00000002
+NOT_TO                            00000004
+NOT_TX8                           00000006
+NOT_W                             00000002
+NOT_WRITE                         00000002
+OBF                               00000006
+OERR                              00000001
+OPTION_REG                        00000081
+P                                 00000004
+PCFG0                             00000000
+PCFG1                             00000001
+PCFG2                             00000002
+PCFG3                             00000003
+PCL                               00000002
+PCLATH                            0000000A
+PCON                              0000008E
+PEIE                              00000006
+PEN                               00000002
+PIE1                              0000008C
+PIE2                              0000008D
+PIR1                              0000000C
+PIR2                              0000000D
+PORTA                             00000005
+PORTB                             00000006
+PORTC                             00000007
+PORTD                             00000008
+PORTE                             00000009
+PR2                               00000092
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+PSPIE                             00000007
+PSPIF                             00000007
+PSPMODE                           00000004
+R                                 00000002
+RBIE                              00000003
+RBIF                              00000000
+RC8_9                             00000006
+RC9                               00000006
+RCD8                              00000000
+MPASM  5.14                           PR9.ASM   5-24-2019  11:15:37         PAGE  9
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RCEN                              00000003
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             0000001A
+RCSTA                             00000018
+RD                                00000000
+READ_WRITE                        00000002
+RP0                               00000005
+RP1                               00000006
+RSEN                              00000001
+RX9                               00000006
+RX9D                              00000000
+R_W                               00000002
+S                                 00000003
+SAI_INT                           00000007
+SEN                               00000000
+SMP                               00000007
+SPBRG                             00000099
+SPEN                              00000007
+SREN                              00000005
+SSPADD                            00000093
+SSPBUF                            00000013
+SSPCON                            00000014
+SSPCON2                           00000091
+SSPEN                             00000005
+SSPIE                             00000003
+SSPIF                             00000003
+SSPM0                             00000000
+SSPM1                             00000001
+SSPM2                             00000002
+SSPM3                             00000003
+SSPOV                             00000006
+SSPSTAT                           00000094
+STATUS                            00000003
+STATUS_TEMP                       00000021
+SW4                               PORTB,0
+SYNC                              00000004
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000010
+T1INSYNC                          00000002
+T1OSCEN                           00000003
+T1SYNC                            00000002
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000012
+TABELA                            00000039
+TESTE                             0000001D
+TESTECHAVE                        00000026
+MPASM  5.14                           PR9.ASM   5-24-2019  11:15:37         PAGE 10
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TESTECHAVE2                       0000002F
+TFILTRO                           00000023
+TFILTRODEC                        00000024
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR1CS                            00000001
+TMR1H                             0000000F
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1L                             0000000E
+TMR1ON                            00000000
+TMR2                              00000011
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2ON                            00000002
+TOUTPS0                           00000003
+TOUTPS1                           00000004
+TOUTPS2                           00000005
+TOUTPS3                           00000006
+TRAVA                             00000020
+TRAVA2                            00000023
+TRISA                             00000085
+TRISB                             00000086
+TRISC                             00000087
+TRISD                             00000088
+TRISE                             00000089
+TRISE0                            00000000
+TRISE1                            00000001
+TRISE2                            00000002
+TRMT                              00000001
+TX8_9                             00000006
+TX9                               00000006
+TX9D                              00000000
+TXD8                              00000000
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             00000019
+TXSTA                             00000098
+UA                                00000001
+VALOR                             00000022
+VALORMAXIMO                       00000009
+VALORMINIMO                       00000000
+W                                 00000000
+WCOL                              00000007
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+W_TEMP                            00000020
+Z                                 00000002
+_BODEN_OFF                        00003FBF
+_BODEN_ON                         00003FFF
+MPASM  5.14                           PR9.ASM   5-24-2019  11:15:37         PAGE 11
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_CPD_OFF                          00003FFF
+_CPD_ON                           00003EFF
+_CP_ALL                           00001FFF
+_CP_OFF                           00003FFF
+_DEBUG_OFF                        00003FFF
+_DEBUG_ON                         000037FF
+_HS_OSC                           00003FFE
+_LP_OSC                           00003FFC
+_LVP_OFF                          00003F7F
+_LVP_ON                           00003FFF
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC                           00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_WRT_1FOURTH                      00003BFF
+_WRT_256                          00003DFF
+_WRT_HALF                         000039FF
+_WRT_OFF                          00003FFF
+_XT_OSC                           00003FFD
+__16F877A                         00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : X---XXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXX------ ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:   103
+Program Memory Words Free:  8089
+
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     6 reported,     0 suppressed
+
+

@@ -1,0 +1,403 @@
+FILE,LAD 2:
+SOR,0 XIC,I:1/0 OTE,O:4/0 EOR,0
+RCM,Sensores de Embarque e Desembarque
+SOR,1 XIC,I:1/1 OTE,O:4/1 EOR,1
+RCM,
+SOR,2 XIC,O:4/0 XIC,O:4/1 OTE,O:2/0 EOR,2
+RCM,Condição para que o carro esteja no lugar correto de embarque e sembarque será SI e SF = 1
+SOR,3 XIC,O:2/0 TON,T4:0,50 EOR,3
+RCM,Lógica para acionamento das portas de saída
+SOR,4 BST,1 XIC,I:1/2 NXB,1 XIO,I:1/3 XIC,O:4/3 BND,1 OTE,O:4/3 EOR,4
+RCM,
+SOR,5 XIO,O:2/7 BST,1 XIO,T4:1/DN XIC,T4:0/DN NXB,1 XIO,I:1/3 XIC,O:4/3 BND,1 OTE,O:2/1 EOR,5
+RCM,
+SOR,6 BST,1 XIC,O:2/1 NXB,1 XIC,T4:1/EN BND,1 XIC,O:2/0 TON,T4:1,150 EOR,6
+RCM,Lógica para fechamento das portas de saída
+SOR,7 XIO,O:2/1 BST,1 XIO,O:2/1 XIC,T4:1/DN NXB,1 BST,2 XIC,I:1/3 NXB,2 XIC,O:2/2 XIO,I:1/2 BND,2 BND,1 OTE,O:2/2 EOR,7
+RCM,
+SOR,8 XIO,O:4/13 BST,1 XIC,O:2/1 NXB,1 XIC,O:4/15 BND,1 OTE,O:4/15 EOR,8
+RCM,Condição de reset para T4:2
+SOR,9 XIC,O:4/15 BST,1 XIC,O:2/2 NXB,1 XIC,O:4/14 BND,1 OTE,O:4/14 EOR,9
+RCM,
+SOR,10 XIC,O:4/14 BST,1 OTE,O:4/13 NXB,1 RES,T4:2 BND,1 EOR,10
+RCM,
+SOR,11 XIC,O:2/0 XIC,O:2/2 RTO,T4:2,100 EOR,11
+RCM,Lógica para acionamento das portas de entrada
+SOR,12 XIC,T4:2/DN XIO,O:2/7 BST,1 XIO,O:2/5 OTE,O:2/3 NXB,1 XIO,O:2/6 OTE,O:2/4 BND,1 EOR,12
+RCM,Sensores de Embarque e Desembarque
+SOR,13 XIC,I:1/4 CTU,C5:0,4 EOR,13
+RCM,Lógica para fechamento das portas de entrada
+SOR,14 XIC,T4:2/DN BST,1 XIC,C5:0/DN NXB,1 BST,2 XIC,I:1/6 NXB,2 XIC,O:2/5 BND,2 BND,1 OTE,O:2/5 EOR,14
+RCM,Sensores de Embarque e Desembarque
+SOR,15 XIC,I:1/5 CTU,C5:1,20 EOR,15
+RCM,Sensores de Embarque e Desembarque
+SOR,16 XIC,T4:2/DN BST,1 XIC,C5:1/DN NXB,1 BST,2 XIC,I:1/6 NXB,2 XIC,O:2/6 BND,2 BND,1 OTE,O:2/6 EOR,16
+RCM,Sensores de Embarque e Desembarque
+SOR,17 BST,1 XIC,I:1/7 XIC,O:2/5 XIC,O:2/6 NXB,1 XIC,O:2/7 XIO,O:2/0 BND,1 OTE,O:2/7 EOR,17
+RCM,Lógica para trava de seguranaça
+SOR,18 BST,1 XIC,I:1/8 NXB,1 XIC,O:2/8 BND,1 XIO,T4:3/DN OTE,O:2/8 EOR,18
+RCM,Acionamento do carro
+SOR,19 BST,1 XIC,I:1/9 NXB,1 XIC,T4:3/EN BND,1 TON,T4:3,100 EOR,19
+RCM,Sensor SCE para desacionar motor do carro
+SOR,20 XIC,O:4/0 XIO,O:4/1 XIC,O:2/7 RES,C5:0 RES,C5:1 RES,T4:0 RES,T4:1 RES,T4:3 EOR,20
+RCM,Logica de reset dos contadores e timers
+SOR,21 END,21
+RCM,
+FILE,SBR 3:
+SOR,0 END,0
+RCM,
+FILE,SBR 4:
+SOR,0 END,0
+RCM,
+FILE,SBR 5:
+SOR,0 END,0
+RCM,
+FILE,SBR 6:
+SOR,0 END,0
+RCM,
+FILE,SBR 7:
+SOR,0 END,0
+RCM,
+FILE,SBR 8:
+SOR,0 END,0
+RCM,
+FILE,SBR 9:
+SOR,0 END,0
+RCM,
+BTBL
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+NTBL
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+FTBL
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+SYMBOLS
+I:1/0 SF
+I:1/1 SI
+O:4/0 Aux SF
+O:4 Aux SF
+O:4/1 Aux SI
+O:4/2 Estacionado
+T4:0 Temp abre porta saida
+O:2/0 Estacionado
+O:2/1 Psaida Aberta
+O:2/2 Psaida Fechada
+I:1/3 BFS
+I:1/2 BAS
+T4:1 Temp fecha porta saida
+O:2/3 Pentrada1 Aberta
+I:1/4 SC1
+O:2/4 Pentrada2 Aberta
+O:2/5 Pentrada1 Fechada
+I:1/5 SC2
+O:2/6 Pentrada2 Fechada
+C5:0 Contador fecha porta entrada
+C5:1 Contador fecha porta entrada
+T4:2 Temp abr porta entrada
+I:1/6 BFE
+I:1/7 BTS
+I:1/8 BL
+O:2/7 TS
+O:2/8 CE
+I:1/9 SCE
+T4:3 Timer do CE
+O:4/3 Manual
+O:4/4 Aux porta entrada
+O:4/6 Aux res P entrada
+O:4/7 Reset P entrada

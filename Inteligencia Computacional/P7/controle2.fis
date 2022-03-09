@@ -1,0 +1,49 @@
+[System]
+Name='controle2'
+Type='mamdani'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=9
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+[Input1]
+Name='erro'
+Range=[-4 4]
+NumMFs=3
+MF1='N':'trimf',[-4 -2 0]
+MF2='Z':'trimf',[-2 0 2]
+MF3='P':'trimf',[0 2 4]
+
+[Input2]
+Name='taxa'
+Range=[-2.5 2.5]
+NumMFs=3
+MF1='N':'trimf',[-5 -2.5 0]
+MF2='P':'trimf',[0 2.5 5]
+MF3='Z':'trimf',[-0.4999 0 0.4999]
+
+[Output1]
+Name='saida1'
+Range=[-75 75]
+NumMFs=5
+MF1='NG':'trimf',[-78.2 -70.7 -68.5]
+MF2='NP':'trimf',[-45 -22.5 -3.76984126984127]
+MF3='Z':'trimf',[-0.198 0.000175 0.595]
+MF4='PP':'trimf',[3.76984126984127 22.5 41.5]
+MF5='PG':'trimf',[67.2619047619048 71.3 78.8]
+
+[Rules]
+1 1, 3 (1) : 1
+1 2, 2 (1) : 1
+1 3, 1 (1) : 1
+2 1, 2 (1) : 1
+2 3, 3 (1) : 1
+2 2, 4 (1) : 1
+3 1, 4 (1) : 1
+3 3, 5 (1) : 1
+3 2, 3 (1) : 1
